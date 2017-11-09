@@ -46,7 +46,7 @@ void PFslamWrapper::init() {
   PFslam::read_iniFile(ini_filename);
   // read rawlog file if it  exists
   if (is_file_exists(rawlog_filename)) {
-    ROS_WARN("PLAY FROM RAWLOG FILE: " << rawlog_filename.c_str());
+    ROS_WARN("PLAY FROM RAWLOG FILE: %s", rawlog_filename.c_str());
     PFslam::read_rawlog(data, rawlog_filename);
     rawlog_play_ = true;
   }
