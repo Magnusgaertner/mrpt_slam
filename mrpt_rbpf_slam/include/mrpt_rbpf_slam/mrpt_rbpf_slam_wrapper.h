@@ -30,6 +30,7 @@
 #include <visualization_msgs/Marker.h>
 // mrpt msgs
 #include "mrpt_msgs/ObservationRangeBeacon.h"
+#include <mrpt_msgs/ObservationRangeBearing.h>
 // mrpt bridge libs
 #include <mrpt_bridge/pose.h>
 #include <mrpt_bridge/map.h>
@@ -45,6 +46,7 @@ using namespace mrpt::obs;
 #include <mrpt/slam/CObservationBeaconRanges.h>
 using namespace mrpt::slam;
 #endif
+#include <mrpt/obs/CObservationBearingRange.h>
 
 /**
  * @brief The PFslamWrapper class provides  the ROS wrapper for Rao-Blackwellized Particle filter SLAM from MRPT
@@ -114,6 +116,18 @@ public:
   void laserCallback(const sensor_msgs::LaserScan& _msg);
 
   /**
+  * @brief callback function for the landmark observations
+  *
+  * Given the laser scans  wait for odometry,
+  * create the pair of action and observation,
+  * implement one SLAM update,
+  * publish map and pose.
+  *
+  * @param _msg  the landmark observation message
+  */
+  void landmarkCallback(const mrpt_msgs::ObservationRangeBearing& _msg);
+
+  /**
    * @brief wait for transfor between odometry frame and the robot frame
    *
    * @param des position of the robot with respect to odometry frame
@@ -171,6 +185,7 @@ private:
 
   std::map<std::string, mrpt::poses::CPose3D> laser_poses_;   ///< laser scan poses with respect to the map
   std::map<std::string, mrpt::poses::CPose3D> beacon_poses_;  ///< beacon poses with respect to the map
+  std::map<std::string, mrpt::poses::CPose3D> landmark_poses_; ///< landmark poses with respect to the map
 
   // Subscribers
   std::vector<ros::Subscriber> sensorSub_;  ///< list of sensors topics
